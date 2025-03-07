@@ -15,15 +15,15 @@
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
                          ("elpa" . "https://elpa.gnu.org/packages/")
-												 ))
+			 ))
 
 ;; Better Defaults
 (use-package emacs
   :custom
   (menu-bar-mode nil)
-	(ring-bell-function 'ignore)
-	(inhibit-startup-message t)
-	(initial-scratch-message nil)
+  (ring-bell-function 'ignore)
+  (inhibit-startup-message t)
+  (initial-scratch-message nil)
   (scroll-bar-mode nil)
   (tool-bar-mode nil)  
   (delete-selection-mode t)
@@ -31,15 +31,15 @@
   (electric-pair-mode t)    
   (blink-cursor-mode nil)   
   (global-auto-revert-mode t)
-	(delete-by-moving-to-trash t)
-	(winner-mode t)
+  (delete-by-moving-to-trash t)
+  (winner-mode t)
   ;;(recentf-mode t) ;; Enable recent file mode
   ;;(global-visual-line-mode t)           ;; Enable truncated lines
-	(x-select-enable-clipboard t)
+  (x-select-enable-clipboard t)
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 10)
   ;;(scroll-margin 8)
-  (tab-width 2)
+  ;;(tab-width 2)
   (make-backup-files nil)
   (auto-save-default nil)
   (column-number-mode)
@@ -57,9 +57,9 @@
 
 ;; Font and Font-Size
 (set-face-attribute 'default nil 
-										:family "Iosevka Comfy"
-										:height 160
-										:weight `regular)
+		    :family "Iosevka Comfy"
+		    :height 130
+		    :weight `regular)
 
 ;; Line numbers and autoclose parentheses when programming
 (add-hook 'prog-mode-hook (lambda ()
@@ -73,6 +73,27 @@
   ("C--" . text-scale-decrease)
   ("<C-wheel-up>" . text-scale-increase)
   ("<C-wheel-down>" . text-scale-decrease))
+
+;; eww
+(use-package url-cookie
+  :ensure nil
+  :commands (url-cookie-list)
+  :config
+  (setq url-cookie-untrusted-urls '(".*")))
+
+(defun eww-reddit-redirect(url)
+  "Redirect reddit.com to old.reddit.com automatically."
+  (replace-regexp-in-string "https://www.reddit.com" "https://old.reddit.com" url))
+
+(setq eww-url-transformers '(eww-remove-tracking eww-reddit-redirect))
+
+;; Start Syncthing process
+(defun start-syncthing ()
+  "Start the Syncthing process."
+  (interactive)
+  (start-process "syncthing" "*syncthing*" "syncthing"))
+
+(global-set-key (kbd "C-c s") 'start-syncthing)
 
 ;; Project.el
 (use-package project
@@ -95,27 +116,27 @@
 ;; vTerm
 (use-package vterm
   :ensure t
-	:bind (("C-c t" . vterm))
+  :bind (("C-c t" . vterm))
   :config
   (setq vterm-timer-delay 0.01))
 
 ;; eshell
 (use-package eshell
-	:ensure nil
-	:bind (("C-c e" . eshell)))
+  :ensure nil
+  :bind (("C-c e" . eshell)))
 
 ;; Dired
 (use-package dired
-	:ensure nil
-	:defer t
-	:config
-	(setq dired-recursive-copies 'always)
-	(setq dired-create-destination-dirs 'ask)
-	(setq dired-make-directory-clickable t)
-	(setq dired-mouse-drag-files t)
-	(setq dired-dwim-target t)
-	(setq dired-kill-when-opening-new-dired-buffer t)
-	(setq dired-listing-switches "-ahl --group-directories-first"))
+  :ensure nil
+  :defer t
+  :config
+  (setq dired-recursive-copies 'always)
+  (setq dired-create-destination-dirs 'ask)
+  (setq dired-make-directory-clickable t)
+  (setq dired-mouse-drag-files t)
+  (setq dired-dwim-target t)
+  (setq dired-kill-when-opening-new-dired-buffer t)
+  (setq dired-listing-switches "-ahl --group-directories-first"))
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; eglot configuration
@@ -127,21 +148,24 @@
   (eglot-events-buffer-size 0) ;; No event buffers (Lsp server logs)
   (eglot-autoshutdown t) ;; Shutdown unused servers
   (eglot-report-progress nil) ;; Disable lsp server logs
-	)
+  )
 
-;; Emmets
-(use-package emmet-mode
-  :ensure t
-  :hook ((html-mode css-mode) . emmet-mode))
+;; tree-sit auto
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
 
 ;; Rails / Ruby
-(use-package ruby-mode
+(use-package ruby-ts-mode
   :mode ("\\.rb\\'"      
          "\\.rake\\'"    
          "\\.gemspec\\'" 
          "Gemfile\\'"    
          "Capfile\\'")
-	)
+  )
 
 ;; Geiser
 (use-package geiser-mit :ensure t)
@@ -150,7 +174,7 @@
 (use-package docker
   :ensure t
   :bind ("C-c d" . docker)
-	:config	(setq docker-use-sudo t))
+  :config	(setq docker-use-sudo t))
 
 ;; Python Virtual Enviornment Support
 (use-package pet
@@ -162,20 +186,20 @@
   :ensure nil
   :custom
   (org-edit-src-content-indentation 2)
-	(org-startup-folded t) 
+  (org-startup-folded t) 
   :hook
   (org-mode . org-indent-mode)
-	(org-mode . toggle-truncate-lines)
+  (org-mode . toggle-truncate-lines)
   (org-mode . word-wrap-whitespace-mode)
-	:bind
-	("C-c c" . org-capture)
-	("C-c a" . org-agenda)
-	:config
-	(setq org-capture-templates
-				'(
-					("c" "Add a Contact"
-					 entry (file "~/Documents/Org/20250112173941-contacts.org")
-					 "* %^{First} %^{Last} :%^{Select a Tag |family|friend|career}: %?
+  :bind
+  ("C-c c" . org-capture)
+  ("C-c a" . org-agenda)
+  :config
+  (setq org-capture-templates
+	'(
+	  ("c" "Add a Contact"
+	   entry (file "~/Documents/Org/20250112173941-contacts.org")
+	   "* %^{First} %^{Last} :%^{Select a Tag |family|friend|career}: %?
 :PROPERTIES:
 :First: %\\1
 :Last: %\\2
@@ -193,15 +217,15 @@
 ** DOB: [%\\4]
 *** Reminder <%\\4 .+1y}>
 ** Notes")
-					("C" "Add a Company"
-					 entry (file"~/Documents/Org/20250112182718-companies.org")
-					 "* %^{Company} :%^{Select a Tag |career|service|info}: %?
+	  ("C" "Add a Company"
+	   entry (file"~/Documents/Org/20250112182718-companies.org")
+	   "* %^{Company} :%^{Select a Tag |career|service|info}: %?
 :PROPERTIES:
 :Company: %\\1
 :Website: [[%^{Website}]]
 :END:
 ** Notes")
-					)))
+	  )))
 
 (use-package toc-org
   :commands toc-org-enable
@@ -213,14 +237,14 @@
 
 ;; Org-roam
 (use-package org-roam
-	:ensure t
-	:custom
-	(org-roam-directory "~/Documents/Org")
-	:bind(("C-c n l" . org-roam-buffer-toggle)
-				("C-c n f" . org-roam-node-find)
-				("C-c n i" . org-roam-node-insert))
-	:config
-	(org-roam-setup))
+  :ensure t
+  :custom
+  (org-roam-directory "~/Documents/Org")
+  :bind(("C-c n l" . org-roam-buffer-toggle)
+	("C-c n f" . org-roam-node-find)
+	("C-c n i" . org-roam-node-insert))
+  :config
+  (org-roam-setup))
 
 ;; Nerd Icons
 (use-package nerd-icons
