@@ -19,6 +19,9 @@
 
 ;; Better Defaults
 (use-package emacs
+  :bind
+  (("M-o" . other-window)
+   ("C-." . duplicate-dwim))
   :custom
   (menu-bar-mode nil)
   (ring-bell-function 'ignore)
@@ -31,6 +34,7 @@
   (electric-pair-mode t)    
   (blink-cursor-mode nil)   
   (global-auto-revert-mode t)
+  (global-auto-revert-non-file-buffers t)
   (delete-by-moving-to-trash t)
   (winner-mode t)
   ;;(recentf-mode t) ;; Enable recent file mode
@@ -38,6 +42,8 @@
   (x-select-enable-clipboard t)
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 10)
+  (tab-bar-close-button-show nil)
+  (tab-bar-new-button-show nil)
   ;;(scroll-margin 8)
   ;;(tab-width 2)
   (make-backup-files nil)
@@ -73,6 +79,22 @@
   ("C--" . text-scale-decrease)
   ("<C-wheel-up>" . text-scale-increase)
   ("<C-wheel-down>" . text-scale-decrease))
+
+;; proced
+(use-package proced
+  :ensure nil
+  :defer t
+  :custom
+  (proced-enable-color-flag t)
+  (proced-tree-flag t)
+  (proced-auto-update-flag 'visible)
+  (proced-auto-update-interval 1)
+  (proced-descent t)
+  (proced-filter 'user) ;; We can change interactively with `s'
+  :config
+  (add-hook 'proced-mode-hook
+            (lambda ()
+              (proced-toggle-auto-update 1))))
 
 ;; eww
 (use-package url-cookie
