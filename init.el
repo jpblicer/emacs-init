@@ -130,7 +130,7 @@
 
 ;; mise
 (use-package mise
-  :hook (after-init . global-mise-mode)
+  :hook (after-init . global-mise-mode))
 
 ;; tramp
 (use-package tramp
@@ -173,8 +173,9 @@
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
   (eglot-report-progress nil)
+  :config
   (add-to-list 'eglot-server-programs
-               '((ruby-ts-mode) . ("solargraph" "stdio"))))
+	       '(ruby-ts-mode . ("solargraph" "stdio"))))
 
 ;; tree-sit auto
 (use-package treesit-auto
