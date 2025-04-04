@@ -37,22 +37,18 @@
   (global-auto-revert-non-file-buffers t)
   (delete-by-moving-to-trash t)
   (winner-mode t)
-  ;;(recentf-mode t) ;; Enable recent file mode
-  ;;(global-visual-line-mode t)           ;; Enable truncated lines
   (x-select-enable-clipboard t)
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 10)
   (tab-bar-close-button-show nil)
   (tab-bar-new-button-show nil)
-  ;;(scroll-margin 8)
-  ;;(tab-width 2)
+  (scroll-margin 8)
   (make-backup-files nil)
   (auto-save-default nil)
   (column-number-mode)
   :hook
-  (prog-mode . (lambda () (hs-minor-mode t))) ;; Enable folding hide/show globally
+  (prog-mode . (lambda () (hs-minor-mode t)))
   :config
-  ;; Move customization variables to a separate file and load it, avoid filling up init.el with unnecessary variables
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage))
 
@@ -90,7 +86,7 @@
   (proced-auto-update-flag 'visible)
   (proced-auto-update-interval 1)
   (proced-descent t)
-  (proced-filter 'user) ;; We can change interactively with `s'
+  (proced-filter 'user)
   :config
   (add-hook 'proced-mode-hook
             (lambda ()
@@ -120,21 +116,28 @@
 ;; Project.el
 (use-package project
   :ensure nil
-  :bind (("C-c p" . project-switch-project)  ;; Key binding to switch projects
-         ("C-c f" . project-find-file)      ;; Key binding to find a file in the project
-         ("C-c d" . project-dired)))         ;; Key binding to open dired for the project
+  :bind (("C-c p" . project-switch-project)
+         ("C-c f" . project-find-file)))
 
 (setq project--default-search-method 'git)
 
 ;; Use exec-path-from-shell to set up PATH
-(use-package exec-path-from-shell
-  :ensure t
+ (use-package exec-path-from-shell
+   :ensure t
   :config
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
-(add-to-list 'exec-path "/usr/bin")
+;; mise
+(use-package mise
+  :hook (after-init . global-mise-mode)
 
+;; tramp
+(use-package tramp
+  :ensure nil
+  :config
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+  
 ;; vTerm
 (use-package vterm
   :ensure t
@@ -164,13 +167,14 @@
 ;; eglot configuration
 (use-package eglot
   :ensure nil
-  :hook ((c-mode c++-mode lua-mode ruby-mode go-mode
-                 js-mode typescript-mode python-mode) . eglot-ensure)
+  :hook ((c-ts-mode c++-ts-mode lua-ts-mode ruby-ts-mode go-ts-mode
+                 js-ts-mode typescript-ts-mode python-ts-mode) . eglot-ensure)
   :custom
-  (eglot-events-buffer-size 0) ;; No event buffers (Lsp server logs)
-  (eglot-autoshutdown t) ;; Shutdown unused servers
-  (eglot-report-progress nil) ;; Disable lsp server logs
-  )
+  (eglot-events-buffer-size 0)
+  (eglot-autoshutdown t)
+  (eglot-report-progress nil)
+  (add-to-list 'eglot-server-programs
+               '((ruby-ts-mode) . ("solargraph" "stdio"))))
 
 ;; tree-sit auto
 (use-package treesit-auto
@@ -180,23 +184,22 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
+;; Docker
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker)
+  :config	(setq docker-use-sudo t))
+
 ;; Rails / Ruby
 (use-package ruby-ts-mode
   :mode ("\\.rb\\'"      
          "\\.rake\\'"    
          "\\.gemspec\\'" 
          "Gemfile\\'"    
-         "Capfile\\'")
-  )
+         "Capfile\\'"))
 
 ;; Geiser
 (use-package geiser-mit :ensure t)
-
-;; Docker
-(use-package docker
-  :ensure t
-  :bind ("C-c d" . docker)
-  :config	(setq docker-use-sudo t))
 
 ;; Python Virtual Enviornment Support
 (use-package pet
@@ -330,7 +333,7 @@
   :init
   (vertico-mode))
 
-(savehist-mode) ;; Enables save history mode
+(savehist-mode)
 
 ;; Marginalia
 (use-package marginalia
@@ -347,8 +350,6 @@
 
 ;;Consult
 (use-package consult
-  ;; Enable automatic preview at point in the *Completions* buffer. This is
-  ;; relevant when you use the default completion UI.
   :hook (completion-list-mode . consult-preview-at-point-mode)
   :init
   ;; Optionally configure the register formatting. This improves the register
@@ -404,11 +405,11 @@
   :diminish
   :custom
   (which-key-side-window-location 'bottom)
-  (which-key-sort-order #'which-key-key-order-alpha) ;; Same as default, except single characters are sorted alphabetically
+  (which-key-sort-order #'which-key-key-order-alpha)
   (which-key-sort-uppercase-first nil)
-  (which-key-add-column-padding 1) ;; Number of spaces to add to the left of each column
-  (which-key-min-display-lines 6)  ;; Increase the minimum lines to display, because the default is only 1
-  (which-key-idle-delay 0.8)       ;; Set the time delay (in seconds) for the which-key popup to appear
+  (which-key-add-column-padding 1)
+  (which-key-min-display-lines 6)
+  (which-key-idle-delay 0.8)
   (which-key-max-description-length 25)
   (which-key-allow-imprecise-window-fit nil))
 
