@@ -21,7 +21,8 @@
 (use-package emacs
   :bind
   (("M-o" . other-window)
-   ("C-." . duplicate-dwim))
+   ("C-." . duplicate-dwim)
+   ("C-x C-b" . ibuffer))
   :custom
   (menu-bar-mode nil)
   (ring-bell-function 'ignore)
@@ -121,13 +122,6 @@
 
 (setq project--default-search-method 'git)
 
-;; Use exec-path-from-shell to set up PATH
- (use-package exec-path-from-shell
-   :ensure t
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
-
 ;; mise
 (use-package mise
   :hook (after-init . global-mise-mode))
@@ -137,7 +131,14 @@
   :ensure nil
   :config
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
-  
+
+;; Use exec-path-from-shell to set up PATH
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
 ;; vTerm
 (use-package vterm
   :ensure t
@@ -168,14 +169,15 @@
 (use-package eglot
   :ensure nil
   :hook ((c-ts-mode c++-ts-mode lua-ts-mode ruby-ts-mode go-ts-mode
-                 js-ts-mode typescript-ts-mode python-ts-mode) . eglot-ensure)
+                    js-ts-mode typescript-ts-mode python-ts-mode) . eglot-ensure)
   :custom
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
   (eglot-report-progress nil)
   :config
   (add-to-list 'eglot-server-programs
-	       '(ruby-ts-mode . ("solargraph" "stdio"))))
+               '(ruby-ts-mode . ("solargraph" "stdio"))
+               '(typescript-ts-mode . ("typescript-language-server" "--stdio"))))
 
 ;; tree-sit auto
 (use-package treesit-auto
@@ -190,6 +192,16 @@
   :ensure t
   :bind ("C-c d" . docker)
   :config	(setq docker-use-sudo t))
+
+;; Verb
+(use-package verb
+  :ensure t
+  :config
+  (define-key org-mode-map (kbd "C-c r") verb-command-map))
+
+;; impostman
+(use-package impostman
+  :ensure t)
 
 ;; Rails / Ruby
 (use-package ruby-ts-mode
