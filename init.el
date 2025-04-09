@@ -116,9 +116,7 @@
 
 ;; Project.el
 (use-package project
-  :ensure nil
-  :bind (("C-c p" . project-switch-project)
-         ("C-c f" . project-find-file)))
+  :ensure nil)
 
 (setq project--default-search-method 'git)
 
