@@ -235,7 +235,7 @@
 	'(
 	  ("c" "Add a Contact"
 	   entry (file "~/Documents/Org/20250112173941-contacts.org")
-	   "* %^{First} %^{Last} :%^{Select a Tag |family|friend|career}: %?
+	   "* %^{First} %^{Last} :%^{Select a Tag |career|friend|family}: %?
 :PROPERTIES:
 :First: %\\1
 :Last: %\\2
@@ -261,6 +261,10 @@
 :Website: [[%^{Website}]]
 :END:
 ** Notes")
+	  ("t" "Create a Todo"
+	   entry (file "~/Documents/Org/20241213195202-todo.org")
+	   "* TODO [#%^{Priority|B|A|C|D}] %^{Task}\n  %u"
+	   :prepend t)
 	  )))
 
 (use-package toc-org
