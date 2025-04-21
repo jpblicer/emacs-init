@@ -263,7 +263,7 @@
 ** Notes")
 	  ("t" "Create a Todo"
 	   entry (file "~/Documents/Org/20241213195202-todo.org")
-	   "* TODO [#%^{Priority|B|A|C|D}] %^{Task}\n  %u"
+	   "* TODO [#%^{Priority|B|A|C|D}] %^{Task}"
 	   :prepend t)
 	  )))
 
