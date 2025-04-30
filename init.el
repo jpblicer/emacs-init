@@ -47,6 +47,7 @@
   (make-backup-files nil)
   (auto-save-default nil)
   (column-number-mode)
+  (text-mode-ispell-word-completion nil)
   :hook
   (prog-mode . (lambda () (hs-minor-mode t)))
   :config
