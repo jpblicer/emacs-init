@@ -97,6 +97,8 @@
 (use-package url-cookie
   :ensure nil
   :commands (url-cookie-list)
+  :bind
+  ("C-c b" . eww)
   :config
   (setq url-cookie-untrusted-urls '(".*")))
 
@@ -264,6 +266,10 @@
 	  ("t" "Create a Todo"
 	   entry (file "~/Documents/Org/20241213195202-todo.org")
 	   "* TODO [#%^{Priority|B|A|C|D}] %^{Task}"
+	   :prepend t)
+	  ("a" "Create an Appointment"
+	   entry (file "~/Documents/Org/20241220185524-calendar.org")
+	   "* %^{Appointment}\nSCHEDULED: %^t\n"
 	   :prepend t)
 	  )))
 
