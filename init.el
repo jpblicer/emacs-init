@@ -229,6 +229,7 @@
   (org-mode . org-indent-mode)
   (org-mode . toggle-truncate-lines)
   (org-mode . word-wrap-whitespace-mode)
+  (org-log-done . 'time)
   :bind
   ("C-c c" . org-capture)
   ("C-c a" . org-agenda)
