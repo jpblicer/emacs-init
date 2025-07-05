@@ -62,7 +62,7 @@
 ;; Font and Font-Size
 (set-face-attribute 'default nil 
 		    :family "Iosevka Comfy"
-		    :height 130
+		    :height 150
 		    :weight `regular)
 
 ;; Line numbers and autoclose parentheses when programming
