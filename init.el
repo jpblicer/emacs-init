@@ -62,7 +62,7 @@
 ;; Font and Font-Size
 (set-face-attribute 'default nil 
 		    :family "Iosevka Comfy"
-		    :height 150
+		    :height 130
 		    :weight `regular)
 
 ;; Line numbers and autoclose parentheses when programming
@@ -266,11 +266,11 @@
 :END:
 ** Notes")
 	  ("t" "Create a Todo"
-	   entry (file "~/Documents/Org/20241213195202-todo.org")
+	   entry (file "~/Documents/Org/20250715185317-agenda.org")
 	   "* TODO [#%^{Priority|B|A|C|D}] %^{Task}"
 	   :prepend t)
 	  ("a" "Create an Appointment"
-	   entry (file "~/Documents/Org/20241220185524-calendar.org")
+	   entry (file "~/Documents/Org/20250715185317-agenda.org")
 	   "* %^{Appointment}\nSCHEDULED: %^t\n"
 	   :prepend t)
 	  )))
