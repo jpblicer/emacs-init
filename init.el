@@ -54,6 +54,41 @@
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage))
 
+
+;; Modeline
+(setq display-time-24hr-format t
+      display-time-day-and-date t
+      display-time-default-load-average nil)
+
+(display-time-mode t)
+
+;; Battery display
+(display-battery-mode t)
+
+(setq-default mode-line-format
+	      `("%e" mode-line-front-space
+	       (:propertize
+		(
+		 ""
+		 mode-line-mule-info
+		 mode-line-client
+		 mode-line-modified
+		 mode-line-remote
+		 mode-line-window-dedicated
+		 )
+		display (min-width (6.0)))
+	       mode-line-frame-identification
+	       mode-line-buffer-identification
+	       "   "
+	       mode-line-position (project-mode-line project-mode-line-format)
+	       (vc-mode vc-mode)
+	       "  "
+	       ;;mode-line-modes
+	       mode-line-format-right-align
+	       mode-line-misc-info
+	       "")
+	      )
+
 ;; Modus Operandi Theme
 (use-package modus-themes
   :config
