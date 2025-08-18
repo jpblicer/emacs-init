@@ -61,8 +61,6 @@
       display-time-default-load-average nil)
 
 (display-time-mode t)
-
-;; Battery display
 (display-battery-mode t)
 
 (setq-default mode-line-format
