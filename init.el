@@ -471,6 +471,26 @@
   (which-key-max-description-length 25)
   (which-key-allow-imprecise-window-fit nil))
 
+;; Ledger
+(use-package ledger-mode
+  :ensure t
+  :mode ("\\.ledger\\'" . ledger-mode)
+  :config
+  (setq ledger-clear-whole-transactions 1)
+  (setq ledger-reconcile-default-commodity
+	"￥"))
+
+;; Org Babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+     (ledger . t)
+     (ruby . t)
+     (screen . nil)
+     (shell . t)
+     (sql . nil)
+     (sqlite . t)))
+
 ;; Runtime Performance
 (setq gc-cons-threshold (* 2 1000 1000))
 (setq read-process-output-max (* 1024 1024))
