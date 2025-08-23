@@ -77,10 +77,10 @@
 		display (min-width (6.0)))
 	       mode-line-frame-identification
 	       mode-line-buffer-identification
-	       "   "
-	       mode-line-position (project-mode-line project-mode-line-format)
+	       ;;"   "
+	       ;;mode-line-position (project-mode-line project-mode-line-format)
 	       (vc-mode vc-mode)
-	       "  "
+	       ;;"  "
 	       ;;mode-line-modes
 	       mode-line-format-right-align
 	       mode-line-misc-info
@@ -97,6 +97,8 @@
 		    :family "Iosevka Comfy"
 		    :height 130
 		    :weight `regular)
+
+(set-fontset-font t 'japanese-jisx0208 "Noto Sans CJK JP-14")
 
 ;; Line numbers and autoclose parentheses when programming
 (add-hook 'prog-mode-hook (lambda ()
