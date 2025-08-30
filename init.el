@@ -21,6 +21,10 @@
 (use-package emacs
   :bind
   (("M-o" . other-window)
+   ("S-<up>" . windmove-up)
+   ("S-<down>" . windmove-down)
+   ("S-<left>" . windmove-left)
+   ("S-<right>" . windmove-right)
    ("C-." . duplicate-dwim)
    ("C-x C-b" . ibuffer))
   :custom
@@ -186,6 +190,14 @@
 (use-package eshell
   :ensure nil
   :bind (("C-c e" . eshell)))
+
+;; Go Translate
+(use-package gt
+  :ensure t
+  :bind ("C-c w" . gt-translate)
+  :config
+  (setq gt-langs '(en ja))
+  (setq gt-default-translator (gt-translator :engines (gt-google-engine))))
 
 ;; Dired
 (use-package dired
