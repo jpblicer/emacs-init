@@ -98,7 +98,7 @@
 
 ;; Font and Font-Size
 (set-face-attribute 'default nil 
-		    :family "Iosevka Comfy"
+		    :family "aporetic"
 		    :height 130
 		    :weight `regular)
 
