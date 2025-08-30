@@ -182,8 +182,9 @@
 ;; vTerm
 (use-package vterm
   :ensure t
-  :bind (("C-c t" . vterm))
-  :config
+  :bind
+  (("C-c t" . (lambda () (interactive) (vterm 'new))))
+    :config
   (setq vterm-timer-delay 0.01))
 
 ;; eshell
@@ -341,6 +342,20 @@
   :config
   (org-roam-setup))
 
+;; Markdown
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown")
+  :bind (:map markdown-mode-map
+         ("C-c C-e" . markdown-do)))
+
+;; Devdocs
+(use-package devdocs
+  :ensure t
+  :bind
+  (("C-h D" . (lambda () (interactive) (devdocs-lookup 'new)))))
+
 ;; Nerd Icons
 (use-package nerd-icons
   :if (display-graphic-p))
@@ -360,7 +375,6 @@
          (magit-pre-refresh  . diff-hl-magit-pre-refresh)
          (magit-post-refresh . diff-hl-magit-post-refresh))
   :init (global-diff-hl-mode))
-
 
 ;; Corfu
 (use-package corfu
