@@ -98,11 +98,11 @@
 
 ;; Font and Font-Size
 (set-face-attribute 'default nil 
-		    :family "aporetic"
+		    :family "Iosevka Comfy"
 		    :height 130
-		    :weight `regular)
+		    :weight 'regular)
 
-(set-fontset-font t 'japanese-jisx0208 "Noto Sans CJK JP-14")
+(set-fontset-font t 'japanese-jisx0208 "Noto Sans CJK JP-13")
 
 ;; Line numbers and autoclose parentheses when programming
 (add-hook 'prog-mode-hook (lambda ()
@@ -198,7 +198,10 @@
   :bind ("C-c w" . gt-translate)
   :config
   (setq gt-langs '(en ja))
-  (setq gt-default-translator (gt-translator :engines (gt-google-engine))))
+  (setq gt-default-translator
+	(gt-translator
+	 :engines (gt-google-engine)
+	 :render (gt-buffer-render))))
 
 ;; Dired
 (use-package dired
