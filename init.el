@@ -215,6 +215,8 @@
   (setq dired-dwim-target t)
   (setq dired-kill-when-opening-new-dired-buffer t)
   (setq dired-listing-switches "-ahl --group-directories-first"))
+(setopt dired-mouse-drag-files                   t
+        mouse-drag-and-drop-region-cross-program t)
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; eglot configuration
