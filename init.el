@@ -62,6 +62,7 @@
 ;; Modeline
 (setq display-time-24hr-format t
       display-time-day-and-date t
+      display-time-format "%Y年%m月%d%a %H:%M"
       display-time-default-load-average nil)
 
 (display-time-mode t)
@@ -195,11 +196,17 @@
 ;; Go Translate
 (use-package gt
   :ensure t
-  :bind ("C-c w" . gt-translate)
+  :bind
+  (([muhenkan] . gt-translate)
+   ([henkan] . gt-translate)
+   ("C-c w" . gt-translate))
   :config
   (setq gt-langs '(en ja))
+  (setq gt-lang-rules
+        '((ja . "[\u3040-\u309F\u30A0-\u30FF\u3400-\u4DBF\u4E00-\u9FFF]"))) ;; better kanji recognition
   (setq gt-default-translator
 	(gt-translator
+	 :taker (gt-taker :langs '(en ja) :text 'word)
 	 :engines (gt-google-engine)
 	 :render (gt-buffer-render))))
 
