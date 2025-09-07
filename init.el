@@ -52,6 +52,7 @@
   (auto-save-default nil)
   (column-number-mode)
   (text-mode-ispell-word-completion nil)
+  (doc-view-resolution 400)
   :hook
   (prog-mode . (lambda () (hs-minor-mode t)))
   :config
