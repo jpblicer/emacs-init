@@ -15,7 +15,7 @@
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
                          ("elpa" . "https://elpa.gnu.org/packages/")
-			 ))
+                         ))
 
 ;; Better Defaults
 (use-package emacs
@@ -33,11 +33,11 @@
   (inhibit-startup-message t)
   (initial-scratch-message nil)
   (scroll-bar-mode nil)
-  (tool-bar-mode nil)  
+  (tool-bar-mode nil)
   (delete-selection-mode t)
   (electric-indent-mode t)
-  (electric-pair-mode t)    
-  (blink-cursor-mode nil)   
+  (electric-pair-mode t)
+  (blink-cursor-mode nil)
   (global-auto-revert-mode t)
   (global-auto-revert-non-file-buffers t)
   (delete-by-moving-to-trash t)
@@ -70,28 +70,28 @@
 (display-battery-mode t)
 
 (setq-default mode-line-format
-	      `("%e" mode-line-front-space
-	       (:propertize
-		(
-		 ""
-		 mode-line-mule-info
-		 mode-line-client
-		 mode-line-modified
-		 mode-line-remote
-		 mode-line-window-dedicated
-		 )
-		display (min-width (6.0)))
-	       mode-line-frame-identification
-	       mode-line-buffer-identification
-	       ;;"   "
-	       ;;mode-line-position (project-mode-line project-mode-line-format)
-	       (vc-mode vc-mode)
-	       ;;"  "
-	       ;;mode-line-modes
-	       mode-line-format-right-align
-	       mode-line-misc-info
-	       "")
-	      )
+              `("%e" mode-line-front-space
+                (:propertize
+                 (
+                  ""
+                  mode-line-mule-info
+                  mode-line-client
+                  mode-line-modified
+                  mode-line-remote
+                  mode-line-window-dedicated
+                  )
+                 display (min-width (6.0)))
+                mode-line-frame-identification
+                mode-line-buffer-identification
+                ;;"   "
+                ;;mode-line-position (project-mode-line project-mode-line-format)
+                (vc-mode vc-mode)
+                ;;"  "
+                ;;mode-line-modes
+                mode-line-format-right-align
+                mode-line-misc-info
+                "")
+              )
 
 ;; Modus Operandi Theme
 (use-package modus-themes
@@ -202,9 +202,12 @@
 (set-fontset-font t 'japanese-jisx0208 "Noto Sans CJK JP-13")
 
 ;; Line numbers and autoclose parentheses when programming
-(add-hook 'prog-mode-hook (lambda ()
-                            (display-line-numbers-mode)
-                            (electric-pair-mode)))
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (display-line-numbers-mode)
+            (electric-pair-mode)
+            (setq-local tab-width 2)
+            (setq-local indent-tabs-mode nil)))
 
 ;; Zoom in / out
 (use-package emacs
@@ -281,7 +284,7 @@
   :ensure t
   :bind
   (("C-c t" . (lambda () (interactive) (vterm 'new))))
-    :config
+  :config
   (setq vterm-timer-delay 0.01))
 
 ;; eshell
@@ -301,10 +304,10 @@
   (setq gt-lang-rules
         '((ja . "[\u3040-\u309F\u30A0-\u30FF\u3400-\u4DBF\u4E00-\u9FFF]"))) ;; better kanji recognition
   (setq gt-default-translator
-	(gt-translator
-	 :taker (gt-taker :langs '(en ja) :text 'word)
-	 :engines (gt-google-engine)
-	 :render (gt-buffer-render))))
+        (gt-translator
+         :taker (gt-taker :langs '(en ja) :text 'word)
+         :engines (gt-google-engine)
+         :render (gt-buffer-render))))
 
 ;; Dired
 (use-package dired
@@ -356,16 +359,12 @@
   :config
   (define-key org-mode-map (kbd "C-c r") verb-command-map))
 
-;; impostman
-(use-package impostman
-  :ensure t)
-
 ;; Rails / Ruby
 (use-package ruby-ts-mode
-  :mode ("\\.rb\\'"      
-         "\\.rake\\'"    
-         "\\.gemspec\\'" 
-         "Gemfile\\'"    
+  :mode ("\\.rb\\'"
+         "\\.rake\\'"
+         "\\.gemspec\\'"
+         "Gemfile\\'"
          "Capfile\\'"))
 
 ;; Geiser
@@ -381,7 +380,7 @@
   :ensure nil
   :custom
   (org-edit-src-content-indentation 2)
-  (org-startup-folded t) 
+  (org-startup-folded t)
   :hook
   (org-mode . org-indent-mode)
   (org-mode . toggle-truncate-lines)
@@ -392,10 +391,10 @@
   ("C-c a" . org-agenda)
   :config
   (setq org-capture-templates
-	'(
-	  ("c" "Add a Contact"
-	   entry (file "~/Documents/Org/20250112173941-contacts.org")
-	   "* %^{First} %^{Last} :%^{Select a Tag |career|friend|family}: %?
+        '(
+          ("c" "Add a Contact"
+           entry (file "~/Documents/Org/20250112173941-contacts.org")
+           "* %^{First} %^{Last} :%^{Select a Tag |career|friend|family}: %?
 :PROPERTIES:
 :First: %\\1
 :Last: %\\2
@@ -413,27 +412,23 @@
 ** DOB: [%\\4]
 *** Reminder <%\\4 .+1y}>
 ** Notes")
-	  ("C" "Add a Company"
-	   entry (file"~/Documents/Org/20250112182718-companies.org")
-	   "* %^{Company} :%^{Select a Tag |career|service|info}: %?
+          ("C" "Add a Company"
+           entry (file"~/Documents/Org/20250112182718-companies.org")
+           "* %^{Company} :%^{Select a Tag |career|service|info}: %?
 :PROPERTIES:
 :Company: %\\1
 :Website: [[%^{Website}]]
 :END:
 ** Notes")
-	  ("t" "Create a Todo"
-	   entry (file "~/Documents/Org/20250715185317-agenda.org")
-	   "* TODO [#%^{Priority|B|A|C|D}] %^{Task}"
-	   :prepend t)
-	  ("a" "Create an Appointment"
-	   entry (file "~/Documents/Org/20250715185317-agenda.org")
-	   "* %^{Appointment}\nSCHEDULED: %^t\n"
-	   :prepend t)
-	  )))
-
-(use-package toc-org
-  :commands toc-org-enable
-  :hook (org-mode . toc-org-mode))
+          ("t" "Create a Todo"
+           entry (file "~/Documents/Org/20250715185317-agenda.org")
+           "* TODO [#%^{Priority|B|A|C|D}] %^{Task}"
+           :prepend t)
+          ("a" "Create an Appointment"
+           entry (file "~/Documents/Org/20250715185317-agenda.org")
+           "* %^{Appointment}\nSCHEDULED: %^t\n"
+           :prepend t)
+          )))
 
 (use-package org-superstar
   :after org
@@ -445,8 +440,8 @@
   :custom
   (org-roam-directory "~/Documents/Org")
   :bind(("C-c n l" . org-roam-buffer-toggle)
-	("C-c n f" . org-roam-node-find)
-	("C-c n i" . org-roam-node-insert))
+        ("C-c n f" . org-roam-node-find)
+        ("C-c n i" . org-roam-node-insert))
   :config
   (org-roam-setup))
 
@@ -456,13 +451,17 @@
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "multimarkdown")
   :bind (:map markdown-mode-map
-         ("C-c C-e" . markdown-do)))
+              ("C-c C-e" . markdown-do)))
 
 ;; Devdocs
 (use-package devdocs
   :ensure t
   :bind
-  (("C-h D" . (lambda () (interactive) (devdocs-lookup 'new)))))
+  (("C-h D" . devdocs-lookup-new))
+  :config
+  (defun devdocs-lookup-new ()
+    (interactive)
+    (devdocs-lookup 'new)))
 
 ;; Nerd Icons
 (use-package nerd-icons
@@ -605,6 +604,11 @@
   (which-key-max-description-length 25)
   (which-key-allow-imprecise-window-fit nil))
 
+;; Gnuplot
+(use-package gnuplot
+  :ensure t
+  :mode("\\.gp" . gnuplot-mode))
+
 ;; Ledger
 (use-package ledger-mode
   :ensure t
@@ -612,18 +616,19 @@
   :config
   (setq ledger-clear-whole-transactions 1)
   (setq ledger-reconcile-default-commodity
-	"￥"))
+        "￥"))
 
 ;; Org Babel
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp . t)
-     (ledger . t)
-     (ruby . t)
-     (screen . nil)
-     (shell . t)
-     (sql . nil)
-     (sqlite . t)))
+   (ledger . t)
+   (ruby . t)
+   (screen . nil)
+   (shell . t)
+   (sql . nil)
+   (sqlite . t)
+   (gnuplot . t)))
 
 ;; Runtime Performance
 (setq gc-cons-threshold (* 2 1000 1000))
