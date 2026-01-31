@@ -199,7 +199,7 @@
 
            :line-spacing nil))))
 
-(set-fontset-font t 'japanese-jisx0208 "Noto Sans CJK JP-13")
+(set-fontset-font t 'japanese-jisx0208 "Noto Sans CJK")
 
 ;; Line numbers and autoclose parentheses when programming
 (add-hook 'prog-mode-hook
