@@ -113,10 +113,7 @@
            :default-height 100)
           (regular)
           (medium
-           :default-family "Aporetic Serif Mono"
-           :default-height 130
-           :fixed-pitch-family "Aporetic Serif Mono"
-           :variable-pitch-family "Aporetic Sans")
+           :default-height 130)
           (large
            :default-height 150)
           (presentation
@@ -137,13 +134,13 @@
            :fixed-pitch-width nil
            :fixed-pitch-height 1.0
 
-           :fixed-pitch-serif-family nil
+           :fixed-pitch-serif-family "Aporetic Serif Mono"
            :fixed-pitch-serif-weight nil
            :fixed-pitch-serif-slant nil
            :fixed-pitch-serif-width nil
            :fixed-pitch-serif-height 1.0
 
-           :variable-pitch-family "Aporetic Serif"
+           :variable-pitch-family "Aporetic Serif Mono"
            :variable-pitch-weight nil
            :variable-pitch-slant nil
            :variable-pitch-width nil
@@ -199,7 +196,7 @@
 
            :line-spacing nil))))
 
-(set-fontset-font t 'japanese-jisx0208 "Noto Sans CJK")
+(set-fontset-font t 'japanese-jisx0208 "Noto Sans CJK JP")
 
 ;; Line numbers and autoclose parentheses when programming
 (add-hook 'prog-mode-hook
@@ -368,7 +365,8 @@
          "Capfile\\'"))
 
 ;; Geiser
-(use-package geiser-mit :ensure t)
+;;(use-package geiser-mit :ensure t)
+(use-package geiser-racket :ensure t)
 
 ;; Python Virtual Enviornment Support
 (use-package pet
