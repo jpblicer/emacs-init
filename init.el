@@ -21,7 +21,6 @@
 (use-package emacs
   :bind
   (("M-o" . other-window)
-   ("C-;" . comment-or-uncomment-region)
    ("C-." . duplicate-dwim)
    ("C-x C-b" . ibuffer))
   :custom
