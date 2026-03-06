@@ -21,10 +21,7 @@
 (use-package emacs
   :bind
   (("M-o" . other-window)
-   ("S-<up>" . windmove-up)
-   ("S-<down>" . windmove-down)
-   ("S-<left>" . windmove-left)
-   ("S-<right>" . windmove-right)
+   ("C-;" . comment-or-uncomment-region)
    ("C-." . duplicate-dwim)
    ("C-x C-b" . ibuffer))
   :custom
