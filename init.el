@@ -55,7 +55,6 @@
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage))
 
-
 ;; Modeline
 (setq display-time-24hr-format t
       display-time-day-and-date t
@@ -306,6 +305,8 @@
 (use-package dired
   :ensure nil
   :defer t
+  :hook
+  (dired-mode . (lambda () (setq truncate-lines t)))
   :config
   (setq dired-recursive-copies 'always)
   (setq dired-create-destination-dirs 'ask)
