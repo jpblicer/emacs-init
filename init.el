@@ -91,7 +91,7 @@
 ;; Modus Operandi Theme
 (use-package modus-themes
   :config
-  (load-theme 'modus-operandi t))
+  (load-theme 'modus-operandi-tinted t))
 
 ;; Fonts
 (use-package fontaine
@@ -391,43 +391,47 @@
            entry (file "~/Documents/Org/20250112173941-contacts.org")
            "* %^{First} %^{Last} :%^{Select a Tag |career|friend|family}: %?
 :PROPERTIES:
-:First: %\\1
-:Last: %\\2
-:DOB: [%^{Date of Birth YYYY-MM-DD}]
-:Phone: %^{Phone}
-:Email: %^{Email}
-:LinkedIn: [[%^{LinkedIn Page}]]
-:Country: %^{Country}
-:Address: %^{Address}
-:Company:
-:TITLE: %^{Title}
+:first: %\\1
+:last: %\\2
+:dob: <%^{Date of Birth YYYY-MM-DD} .+1y>
+:phone: %^{Phone}
+:email: [[mailto:%^{Email}]]
+:linkedin: [[%^{LinkedIn Page}]]
+:country: %^{Country}
+:address: %^{Address}
+:company:
+:title: %^{Title}
 :END:
-** (tel:%\\5)
-** (mailto:%\\6)
-** DOB: [%\\4]
-*** Reminder <%\\4 .+1y}>
-** Notes")
+")
           ("C" "Add a Company"
            entry (file"~/Documents/Org/20250112182718-companies.org")
            "* %^{Company} :%^{Select a Tag |career|service|info}: %?
 :PROPERTIES:
-:Company: %\\1
-:Website: [[%^{Website}]]
+:company: %\\1
+:website: [[%^{Website}]]
 :END:
-** Notes")
+")
           ("t" "Create a Todo"
            entry (file "~/Documents/Org/20250715185317-agenda.org")
            "* TODO [#%^{Priority|B|A|C|D}] %^{Task}"
-           :prepend t)
+           :prepend nil)
           ("a" "Create an Appointment"
            entry (file "~/Documents/Org/20250715185317-agenda.org")
            "* %^{Appointment}\nSCHEDULED: %^t\n"
-           :prepend t)
+           :prepend nil)
           )))
 
 (use-package org-superstar
   :after org
   :hook (org-mode . org-superstar-mode))
+
+(setq org-agenda-prefix-format
+      (quote
+       ((agenda . "  %-1c%?-12t% s")
+        (timeline . "% s")
+        (todo . "%-0c  ")
+        (tags . "%-2c")
+        (search . "%-2c"))))
 
 ;; Org-roam
 (use-package org-roam
