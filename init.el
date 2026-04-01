@@ -629,6 +629,18 @@
    (sqlite . t)
    (gnuplot . t)))
 
+;; Extend sql-mode
+(defun sql-list-column (name)
+  "List the details of a column named NAME"
+  (interactive "sColumn name: ")
+  (sql-send-string
+   (format
+    "SELECT table_schema, table_name, column_name
+     FROM information_schema.columns
+     WHERE column_name ILIKE '%%%s%%'
+     ORDER BY table_schema, table_name;\n"
+    name)))
+
 ;; Runtime Performance
 (setq gc-cons-threshold (* 2 1000 1000))
 (setq read-process-output-max (* 1024 1024))
