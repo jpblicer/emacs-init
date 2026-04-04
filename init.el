@@ -388,7 +388,7 @@
   (setq org-capture-templates
         '(
           ("c" "Add a Contact"
-           entry (file "~/Documents/Org/20250112173941-contacts.org")
+           entry (file "~/Documents/Org/contacts.org")
            "* %^{First} %^{Last} :%^{Select a Tag |career|friend|family}: %?
 :PROPERTIES:
 :first: %\\1
@@ -404,7 +404,7 @@
 :END:
 ")
           ("C" "Add a Company"
-           entry (file"~/Documents/Org/20250112182718-companies.org")
+           entry (file"~/Documents/Org/companies.org")
            "* %^{Company} :%^{Select a Tag |career|service|info}: %?
 :PROPERTIES:
 :company: %\\1
@@ -412,37 +412,47 @@
 :END:
 ")
           ("t" "Create a Todo"
-           entry (file "~/Documents/Org/20250715185317-agenda.org")
+           entry (file "~/Documents/Org/agenda.org")
            "* TODO [#%^{Priority|B|A|C|D}] %^{Task}"
            :prepend nil)
           ("a" "Create an Appointment"
-           entry (file "~/Documents/Org/20250715185317-agenda.org")
+           entry (file "~/Documents/Org/agenda.org")
            "* %^{Appointment}\nSCHEDULED: %^t\n"
            :prepend nil)
           )))
+
+;; Extend Org-Mode
+(defun org-node-find ()
+  "Search recursively for or create an Org file in Directory"
+  (interactive)
+  (let* ((dir "~/Documents/Org/")
+         (files (directory-files-recursively dir "\\.org$"))
+         (names (mapcar (lambda (f)
+                          (file-relative-name f dir))
+                        files))
+         (choice (completing-read "Find or create note: " names)))
+    (find-file (expand-file-name choice dir))))
+
+(global-set-key (kbd "C-c n f") #'org-node-find)
 
 (use-package org-superstar
   :after org
   :hook (org-mode . org-superstar-mode))
 
-(setq org-agenda-prefix-format
-      (quote
-       ((agenda . "  %-1c%?-12t% s")
-        (timeline . "% s")
-        (todo . "%-0c  ")
-        (tags . "%-2c")
-        (search . "%-2c"))))
+;; Org Agenda
+;; (setq org-agenda-prefix-format
+;;       (quote
+;;        ((agenda . " %-1c%?-12t% s")
+;;         (timeline . "% s")
+;;         (todo . "%-0c  ")
+;;         (tags . "%-2c")
+;;         (search . "%-2c"))))
 
-;; Org-roam
-(use-package org-roam
-  :ensure t
-  :custom
-  (org-roam-directory "~/Documents/Org")
-  :bind(("C-c n l" . org-roam-buffer-toggle)
-        ("C-c n f" . org-roam-node-find)
-        ("C-c n i" . org-roam-node-insert))
-  :config
-  (org-roam-setup))
+(setq org-agenda-custom-commands
+      '(("n" "Agenda and all TODOs"
+         ((agenda "")
+          (tags-todo "-habit"))
+         nil)))
 
 ;; Markdown
 (use-package markdown-mode
