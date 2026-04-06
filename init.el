@@ -421,12 +421,23 @@
            :prepend nil)
           )))
 
+;; Org-Id
+(use-package org-id
+  :after org
+  :ensure nil
+  :config
+  (setq org-id-link-to-org-use-id 'create-if-interactive)
+  (setq org-id-track-globally t))
+
 ;; Extend Org-Mode
 (defun org-node-find ()
   "Search recursively for or create an Org file in Directory"
   (interactive)
   (let* ((dir "~/Documents/Org/")
-         (files (directory-files-recursively dir "\\.org$"))
+         (files (seq-remove
+                 (lambda (f)
+                 (string-prefix-p ".#" (file-name-nondirectory f)))
+                 (directory-files-recursively dir "\\.org$")))
          (names (mapcar (lambda (f)
                           (file-relative-name f dir))
                         files))
