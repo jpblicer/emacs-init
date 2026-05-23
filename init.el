@@ -284,23 +284,6 @@
   :ensure nil
   :bind (("C-c e" . eshell)))
 
-;; Go Translate
-(use-package gt
-  :ensure t
-  :bind
-  (([muhenkan] . gt-translate)
-   ([henkan] . gt-translate)
-   ("C-c w" . gt-translate))
-  :config
-  (setq gt-langs '(en ja))
-  (setq gt-lang-rules
-        '((ja . "[\u3040-\u309F\u30A0-\u30FF\u3400-\u4DBF\u4E00-\u9FFF]"))) ;; better kanji recognition
-  (setq gt-default-translator
-        (gt-translator
-         :taker (gt-taker :langs '(en ja) :text 'word)
-         :engines (gt-google-engine)
-         :render (gt-buffer-render))))
-
 ;; Dired
 (use-package dired
   :ensure nil
@@ -458,12 +441,6 @@
 ;;         (todo . "%-0c  ")
 ;;         (tags . "%-2c")
 ;;         (search . "%-2c"))))
-
-(setq org-agenda-custom-commands
-      '(("n" "Agenda and all TODOs"
-         ((agenda "")
-          (tags-todo "-habit"))
-         nil)))
 
 ;; Markdown
 (use-package markdown-mode
@@ -661,6 +638,72 @@
      WHERE column_name ILIKE '%%%s%%'
      ORDER BY table_schema, table_name;\n"
     name)))
+
+;;; Simple Google Translate helper
+(require 'json)
+(require 'url)
+(require 'subr-x)
+
+(defun translate-detect-language (text)
+  (if (string-match-p "[ぁ-んァ-ン一-龯]" text)
+      "ja"
+    "en"))
+
+(defun translate--text-at-point ()
+  (if (use-region-p)
+      (buffer-substring-no-properties
+       (region-beginning)
+       (region-end))
+    (thing-at-point 'symbol t)))
+
+(defun translate--request-url (text)
+  (let* ((source-lang (translate-detect-language text))
+         (target-lang (if (string= source-lang "ja") "en" "ja")))
+    (message "Translating %s → %s" source-lang target-lang)
+    (format
+     "https://translate.googleapis.com/translate_a/single?client=gtx&sl=%s&tl=%s&dt=t&q=%s"
+     source-lang
+     target-lang
+     (url-hexify-string text))))
+
+(defun translate--extract (json)
+  (mapconcat (lambda (item)
+               (aref item 0))
+             (aref json 0)
+             ""))
+
+(defun translate--show-buffer (text translated source-lang)
+  (with-current-buffer (get-buffer-create "*Translation*")
+    (let ((inhibit-read-only t))
+      (erase-buffer)
+      (insert (format "Detected: %s\n\n" source-lang))
+      (insert (format "Original:\n%s\n\n" text))
+      (insert (format "Translation:\n%s\n" translated))
+      (goto-char (point-min))
+      (special-mode)
+      (display-buffer (current-buffer)))))
+
+(defun translate-show ()
+  (interactive)
+  (let ((text (translate--text-at-point)))
+    (unless (and text (not (string-blank-p text)))
+      (user-error "No text found"))
+    (url-retrieve
+     (translate--request-url text)
+     (lambda (_status text)
+       (goto-char url-http-end-of-headers)
+       (set-buffer-multibyte t)
+       (let* ((coding-system-for-read 'utf-8)
+              (json-array-type 'vector)
+              (json (json-read))
+              (translated (translate--extract json))
+              (source-lang (translate-detect-language text)))
+         (translate--show-buffer text translated source-lang)))
+     (list text))))
+
+(global-set-key (kbd "<henkan>") #'translate-show)
+(global-set-key (kbd "<muhenkan>") #'translate-show)
+(global-set-key (kbd "C-c w") #'translate-show)
 
 ;; Runtime Performance
 (setq gc-cons-threshold (* 2 1000 1000))
