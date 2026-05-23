@@ -1,14 +1,6 @@
 ;; Performance
 (setq gc-cons-threshold (* 50 1000 1000))
 
-(defun start/org-babel-tangle-config ()
-  (when (string-equal (file-name-directory (buffer-file-name))
-                      (expand-file-name user-emacs-directory))
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
-
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'start/org-babel-tangle-config)))
-
 ;; Package Managers
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
@@ -639,7 +631,7 @@
      ORDER BY table_schema, table_name;\n"
     name)))
 
-;;; Simple Google Translate helper
+;; Simple Google Translate helper
 (require 'json)
 (require 'url)
 (require 'subr-x)
