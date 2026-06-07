@@ -326,7 +326,13 @@
 (use-package verb
   :ensure t
   :config
-  (define-key org-mode-map (kbd "C-c r") verb-command-map))
+  (define-key org-mode-map (kbd "C-c r") verb-command-map)
+  :config
+  (require `json)
+  (defun verb-graphql-to-json (rs)
+    (oset rs body
+          (json-encode `(("query" . ,(oref rs body)))))
+    rs))
 
 ;; Rails / Ruby
 (use-package ruby-ts-mode
