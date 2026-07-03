@@ -1,11 +1,7 @@
-;; Performance
-(setq gc-cons-threshold (* 50 1000 1000))
-
 ;; Package Managers
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
                          ("elpa" . "https://elpa.gnu.org/packages/")
                          ))
 
@@ -13,6 +9,8 @@
 (use-package emacs
   :bind
   (("M-o" . other-window)
+   ("M-n" . forward-paragraph)
+   ("M-p" . backward-paragraph)
    ("C-." . duplicate-dwim)
    ("C-x C-b" . ibuffer))
   :custom
@@ -40,12 +38,75 @@
   (auto-save-default nil)
   (column-number-mode)
   (text-mode-ispell-word-completion nil)
-  (doc-view-resolution 400)
+  (doc-view-resolution 150)
+  (pdf-cache-prefetch-delay 0.5)
   :hook
   (prog-mode . (lambda () (hs-minor-mode t)))
   :config
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage))
+
+;; Kusanagi Inspired Theme
+(require 'modus-themes)
+
+(setq modus-themes-common-palette-overrides
+      '((bg-main "#050810")
+        (fg-main "#68b8cc")
+
+        ;; accents
+        (cursor "#00e5ff")
+        (builtin "#00e5ff")
+        (keyword "#cc55ff")
+        (string "#00cc77")
+        (type "#ffaa00")
+        (variable "#ff8800")
+        (constant "#ff4466")
+        (function "#00c5dd")
+        (comment "#2d5a70")
+        (docstring "#4a7a8a")
+        (identifier "#cc55ff")
+        (number "#ffaa00")
+        (property "#00b8cc")
+
+        ;; UI
+        (bg-hl-line "#0d1e2e")
+        (bg-region "#0d2840")
+        (fg-region "#8ecede")
+
+        (bg-mode-line-active "#0a1628")
+        (fg-mode-line-active "#8ecede")
+
+        (bg-mode-line-inactive "#080c16")
+        (fg-mode-line-inactive "#2a4a5a")
+
+        ;; diagnostics
+        (err "#ff0044")
+        (warning "#ffaa00")
+        (info "#00cc77")
+
+        ;; links
+        (fg-link "#00e5ff")
+
+        ;; headings
+        (fg-heading-0 "#ff0044")
+        (fg-heading-1 "#ff4466")
+        (fg-heading-2 "#ffaa00")
+        (fg-heading-3 "#00cc77")
+        (fg-heading-4 "#00e5ff")))
+
+(load-theme 'modus-vivendi t)
+
+(custom-set-faces
+ '(tab-bar
+   ((t (:box nil))))
+ '(tab-bar-tab
+   ((t (:box nil :underline nil))))
+ '(tab-bar-tab-inactive
+   ((t (:box nil))))
+ '(line-number-current-line
+   ((t (:foreground "#00e5ff"))))
+ '(line-number
+   ((t (:foreground "#1a3a50")))))
 
 ;; Modeline
 (setq display-time-24hr-format t
@@ -80,110 +141,21 @@
                 "")
               )
 
-;; Modus Operandi Theme
-(use-package modus-themes
-  :config
-  (load-theme 'modus-operandi-tinted t))
+;; ;; Modus Operandi Theme
+;; (use-package modus-themes
+;;   :config
+;;   (load-theme 'modus-operandi-tinted t))
 
 ;; Fonts
-(use-package fontaine
-  :ensure t
-  :hook
-  ((after-init . fontaine-mode)
-   (after-init . (lambda ()
-                   (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular)))))
-  :config
-  (setq-default text-scale-remap-header-line t)
-  (setq fontaine-latest-state-file (locate-user-emacs-file "fontaine-latest-state.eld"))
-  (setq fontaine-presets
-        '((small
-           :default-height 100)
-          (regular)
-          (medium
-           :default-height 130)
-          (large
-           :default-height 150)
-          (presentation
-           :default-height 180)
-          (jumbo
-           :inherit medium
-           :default-height 260)
-          (t
-           :default-family "Aporetic Sans Mono"
-           :default-weight regular
-           :default-slant normal
-           :default-width normal
-           :default-height 130
+(set-face-attribute 'default nil
+                    :family "M PLUS 1 Code"
+                    :height 130)
 
-           :fixed-pitch-family "Aporetic Sans Mono"
-           :fixed-pitch-weight nil
-           :fixed-pitch-slant nil
-           :fixed-pitch-width nil
-           :fixed-pitch-height 1.0
-
-           :fixed-pitch-serif-family "Aporetic Serif Mono"
-           :fixed-pitch-serif-weight nil
-           :fixed-pitch-serif-slant nil
-           :fixed-pitch-serif-width nil
-           :fixed-pitch-serif-height 1.0
-
-           :variable-pitch-family "Aporetic Serif Mono"
-           :variable-pitch-weight nil
-           :variable-pitch-slant nil
-           :variable-pitch-width nil
-           :variable-pitch-height 1.0
-
-           :mode-line-active-family nil
-           :mode-line-active-weight nil
-           :mode-line-active-slant nil
-           :mode-line-active-width nil
-           :mode-line-active-height 1.0
-
-           :mode-line-inactive-family nil
-           :mode-line-inactive-weight nil
-           :mode-line-inactive-slant nil
-           :mode-line-inactive-width nil
-           :mode-line-inactive-height 1.0
-
-           :header-line-family nil
-           :header-line-weight nil
-           :header-line-slant nil
-           :header-line-width nil
-           :header-line-height 1.0
-
-           :line-number-family nil
-           :line-number-weight nil
-           :line-number-slant nil
-           :line-number-width nil
-           :line-number-height 1.0
-
-           :tab-bar-family nil
-           :tab-bar-weight nil
-           :tab-bar-slant nil
-           :tab-bar-width nil
-           :tab-bar-height 1.0
-
-           :tab-line-family nil
-           :tab-line-weight nil
-           :tab-line-slant nil
-           :tab-line-width nil
-           :tab-line-height 1.0
-
-           :bold-family nil
-           :bold-slant nil
-           :bold-weight bold
-           :bold-width nil
-           :bold-height 1.0
-
-           :italic-family nil
-           :italic-weight nil
-           :italic-slant italic
-           :italic-width nil
-           :italic-height 1.0
-
-           :line-spacing nil))))
-
-(set-fontset-font t 'japanese-jisx0208 "Noto Sans CJK JP")
+(dolist (script '(han kana cjk-misc bopomofo))
+  (set-fontset-font
+   t script
+   (font-spec :family "M PLUS 1")
+   nil 'prepend))
 
 ;; Line numbers and autoclose parentheses when programming
 (add-hook 'prog-mode-hook
@@ -370,7 +342,7 @@
         '(
           ("c" "Add a Contact"
            entry (file "~/Documents/Org/contacts.org")
-           "* %^{First} %^{Last} :%^{Select a Tag |career|friend|family}: %?
+           "* %^{First} %^{Last} :%^{Select a Tag |career|friend|family}:%?
 :PROPERTIES:
 :first: %\\1
 :last: %\\2
@@ -386,7 +358,7 @@
 ")
           ("C" "Add a Company"
            entry (file"~/Documents/Org/companies.org")
-           "* %^{Company} :%^{Select a Tag |career|service|info}: %?
+           "* %^{Company} :%^{Select a Tag |career|service|info}:%?
 :PROPERTIES:
 :company: %\\1
 :website: [[%^{Website}]]
