@@ -329,11 +329,25 @@
   :custom
   (org-edit-src-content-indentation 2)
   (org-startup-folded t)
+  (org-hide-leading-stars t)
+  (org-hide-emphasis-markers t)
+  (org-startup-indented t)
+  (org-ellipsis " ⋱")
   :hook
   (org-mode . org-indent-mode)
   (org-mode . toggle-truncate-lines)
   (org-mode . word-wrap-whitespace-mode)
   (org-log-done . 'time)
+  (org-mode . (lambda ()
+                (font-lock-add-keywords nil
+                                        '(("^\\(\\(\\*\\)\\{1\\}\\) " 0 (prog1 nil (put-text-property (match-beginning 2) (match-end 2) 'display "⏣")))
+                                          ("^\\(\\(\\*\\)\\{2\\}\\) " 0 (prog1 nil (put-text-property (match-beginning 2) (match-end 2) 'display "⎔")))
+                                          ("^\\(\\(\\*\\)\\{3\\}\\) " 0 (prog1 nil (put-text-property (match-beginning 2) (match-end 2) 'display "⌗")))
+                                          ("^\\(\\(\\*\\)\\{4\\}\\) " 0 (prog1 nil (put-text-property (match-beginning 2) (match-end 2) 'display "◈")))
+                                          ("^\\(\\(\\*\\)\\{5\\}\\) " 0 (prog1 nil (put-text-property (match-beginning 2) (match-end 2) 'display "⌖")))
+                                          ("^\\(\\(\\*\\)\\{6\\}\\) " 0 (prog1 nil (put-text-property (match-beginning 2) (match-end 2) 'display "▪")))
+                                          ("^\\(\\(\\*\\)\\{7\\}\\) " 0 (prog1 nil (put-text-property (match-beginning 2) (match-end 2) 'display "›")))
+                                          ("^\\(\\(\\*\\)\\{8\\}\\) " 0 (prog1 nil (put-text-property (match-beginning 2) (match-end 2) 'display "·")))))))
   :bind
   ("C-c c" . org-capture)
   ("C-c a" . org-agenda)
@@ -398,19 +412,6 @@
     (find-file (expand-file-name choice dir))))
 
 (global-set-key (kbd "C-c n f") #'org-node-find)
-
-(use-package org-superstar
-  :after org
-  :hook (org-mode . org-superstar-mode))
-
-;; Org Agenda
-;; (setq org-agenda-prefix-format
-;;       (quote
-;;        ((agenda . " %-1c%?-12t% s")
-;;         (timeline . "% s")
-;;         (todo . "%-0c  ")
-;;         (tags . "%-2c")
-;;         (search . "%-2c"))))
 
 ;; Markdown
 (use-package markdown-mode
